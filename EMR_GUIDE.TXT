@@ -1,0 +1,761 @@
+
+
+jchamie@spark1.bstis.com
+spark1.bstis.com
+
+######################################################
+####BASH..
+https://benefitsscience.atlassian.net/wiki/spaces/BP/pages/2396487700/Get+Started+with+Colossus+for+Engineers
+
+
+MTL# ssh -i /c/users/juan.quintero/.ssh/id_rsa jchamie@spark1.bstis.com
+password
+
+hive
+
+show databases;
+
+
+
+
+###########################
+# WRITE TABLES
+
+#In case it is a new database
+CREATE DATABASE <database_name>;
+
+
+USE <database_name>;
+CREATE TABLE my_table (id INT, name STRING);
+
+or
+
+CREATE TABLE specific_database.my_table (id INT, name STRING);
+
+
+# FROM s3
+######################################################################
+# CREATE TRAINING SET TABLE
+
+
+DROP TABLE smartcards.trainingDataSet;
+
+CREATE EXTERNAL TABLE smartcards.trainingDataSet (
+    personid DOUBLE,
+    company_tag STRING,
+    gender STRING,
+    age INT,
+    personstate STRING,
+    relation STRING,
+    months INT,
+    CGlaucoma INT,
+    CArtri INT,
+    CAdd INT,
+    CCancer INT,
+    CHeart INT,
+    CViralInf INT,
+    CMSKplus INT,
+    CNervSystem INT,
+    CKidney INT,
+    CDepress INT,
+    CUnfit INT,
+    CDiabetes INT,
+    sc1_diabcomp_claims INT,
+    sc1_diabcomp_er INT,
+    sc1_diabcomp_hosp INT,
+    sc1_diabcomp_allowed DOUBLE,
+    sc2_b2g_savings DOUBLE,
+    sc2_b2g_claims INT,
+    sc3_subsit_allowed DOUBLE,
+    sc3_substit_claims INT,
+    sc4_rs_over3 INT,
+    sc4_rs_3 INT,
+    sc5_catast_allowed DOUBLE,
+    sc5_catast_claims INT,
+    sc6_er_nocc_visits INT,
+    sc6_er_nocc_allowed DOUBLE,
+    sc7_oop DOUBLE,
+    sc7_oon_days INT,
+    sc7_oonallowed DOUBLE,
+    sc8_mskallowed DOUBLE,
+    amtallowed DOUBLE,
+    amtallowedMED DOUBLE,
+    amtallowedRx DOUBLE
+)
+PARTITIONED BY (sc_month DATE)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.etl.data/smartcards/TrainingDataSet/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+MSCK REPAIR TABLE smartcards.trainingDataSet;
+
+
+
+
+######################################################################
+# CREATE B2G BASE TABLE
+
+DROP TABLE smartcards.AlternativesB2G;
+
+CREATE EXTERNAL TABLE smartcards.AlternativesB2G (
+    therap INT,
+    o_code STRING,
+    y_code STRING
+)
+PARTITIONED BY (sc_month DATE)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.etl.data/smartcards/AlternativesB2G/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+MSCK REPAIR TABLE smartcards.AlternativesB2G;
+
+######################################################################
+# CREATE VOYA EXECUTION TABLE
+
+DROP TABLE smartcards.executionDataSets_voya;
+
+CREATE EXTERNAL TABLE smartcards.executionDataSets_voya (
+    personid STRING,
+    division STRING,
+    division3 STRING,
+    gender STRING,
+    age INT,
+    personstate STRING,
+    relation STRING,
+    months INT,
+    CGlaucoma DOUBLE,
+    CArtri DOUBLE,
+    CAdd DOUBLE,
+    CCancer DOUBLE,
+    CHeart DOUBLE,
+    CViralInf DOUBLE,
+    CMSKplus DOUBLE,
+    CNervSystem DOUBLE,
+    CKidney DOUBLE,
+    CDepress DOUBLE,
+    CUnfit DOUBLE,
+    CDiabetes DOUBLE,
+    sc1_diabcomp_claims DOUBLE,
+    sc1_diabcomp_er DOUBLE,
+    sc1_diabcomp_hosp DOUBLE,
+    sc1_diabcomp_allowed DOUBLE,
+    sc2_b2g_savings DOUBLE,
+    sc2_b2g_claims DOUBLE,
+    sc3_subsit_allowed DOUBLE,
+    sc3_substit_claims DOUBLE,
+    sc4_rs_over3 DOUBLE,
+    sc4_rs_3 DOUBLE,
+    sc5_catast_allowed DOUBLE,
+    sc5_catast_claims DOUBLE,
+    sc6_er_nocc_visits DOUBLE,
+    sc6_er_nocc_allowed DOUBLE,
+    sc7_oop DOUBLE,
+    sc7_oon_days INT,
+    sc7_oonallowed DOUBLE,
+    sc8_mskallowed DOUBLE,
+    amtallowed DOUBLE,
+    amtallowedMED DOUBLE,
+    amtallowedRx DOUBLE
+)
+PARTITIONED BY (sc_month DATE)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.etl.data/smartcards/Voya/ExecutionDataSets/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+MSCK REPAIR TABLE smartcards.executionDataSets_voya;
+
+######################################################################
+# CREATE VBA EXECUTION TABLE
+
+DROP TABLE smartcards.executionDataSets_vba;
+
+CREATE EXTERNAL TABLE smartcards.executionDataSets_vba (
+    personid STRING,
+    division STRING,
+    division3 STRING,
+    gender STRING,
+    age INT,
+    personstate STRING,
+    relation STRING,
+    months INT,
+    CGlaucoma DOUBLE,
+    CArtri DOUBLE,
+    CAdd DOUBLE,
+    CCancer DOUBLE,
+    CHeart DOUBLE,
+    CViralInf DOUBLE,
+    CMSKplus DOUBLE,
+    CNervSystem DOUBLE,
+    CKidney DOUBLE,
+    CDepress DOUBLE,
+    CUnfit DOUBLE,
+    CDiabetes DOUBLE,
+    sc1_diabcomp_claims DOUBLE,
+    sc1_diabcomp_er DOUBLE,
+    sc1_diabcomp_hosp DOUBLE,
+    sc1_diabcomp_allowed DOUBLE,
+    sc2_b2g_savings DOUBLE,
+    sc2_b2g_claims DOUBLE,
+    sc3_subsit_allowed DOUBLE,
+    sc3_substit_claims DOUBLE,
+    sc4_rs_over3 DOUBLE,
+    sc4_rs_3 DOUBLE,
+    sc5_catast_allowed DOUBLE,
+    sc5_catast_claims DOUBLE,
+    sc6_er_nocc_visits DOUBLE,
+    sc6_er_nocc_allowed DOUBLE,
+    amtallowed DOUBLE,
+    amtallowedMED DOUBLE,
+    amtallowedRx DOUBLE
+)
+PARTITIONED BY (sc_month DATE)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.etl.data/smartcards/VBA/ExecutionDataSets/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+
+MSCK REPAIR TABLE smartcards.executionDataSets_vba;
+
+
+######################################################################
+######################################################################
+################          OUTPUT             #########################
+######################################################################
+######################################################################
+# CREATE VOYA SC2 TABLES
+
+DROP TABLE smartcards.voya_sc_2_detail;
+DROP TABLE smartcards.voya_sc_2_detail_ssn;
+
+######################################################################
+# CREATE VOYA SC2 with SSN TABLES
+
+
+DROP TABLE myvoyage_rollins.sc_2_detail;
+
+CREATE EXTERNAL TABLE myvoyage_rollins.sc_2_detail (
+    company STRING,
+    voya_plan_id STRING,
+    bst_person_id STRING,
+    party_id STRING,
+    memb_ssn STRING,
+    memb_dob STRING,
+    therapeutic_gpi_name STRING,
+    therapeutic_class_name STRING,
+    current_ndc STRING,
+    current_ndc_name STRING,
+    alternative_ndc_name STRING,
+    allowed DOUBLE,
+    claims INT,
+    allowed_lm DOUBLE,
+    sc_month DATE
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.colossus/bstmyvoyage_rollins/smartcards/sc_2/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+
+
+DROP TABLE myvoyage_serco.sc_2_detail;
+
+CREATE EXTERNAL TABLE myvoyage_serco.sc_2_detail (
+    company STRING,
+    voya_plan_id STRING,
+    bst_person_id STRING,
+    party_id STRING,
+    memb_ssn STRING,
+    memb_dob STRING,
+    therapeutic_gpi_name STRING,
+    therapeutic_class_name STRING,
+    current_ndc STRING,
+    current_ndc_name STRING,
+    alternative_ndc_name STRING,
+    allowed DOUBLE,
+    claims INT,
+    allowed_lm DOUBLE,
+    sc_month DATE
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.colossus/bstmyvoyage_serco/smartcards/sc_2/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+
+
+DROP TABLE myvoyage_voya.sc_2_detail;
+
+CREATE EXTERNAL TABLE myvoyage_voya.sc_2_detail (
+    company STRING,
+    voya_plan_id STRING,
+    bst_person_id STRING,
+    party_id STRING,
+    memb_ssn STRING,
+    memb_dob STRING,
+    therapeutic_gpi_name STRING,
+    therapeutic_class_name STRING,
+    current_ndc STRING,
+    current_ndc_name STRING,
+    alternative_ndc_name STRING,
+    allowed DOUBLE,
+    claims INT,
+    allowed_lm DOUBLE,
+    sc_month DATE
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.colossus/bstmyvoyage_voya/smartcards/sc_2/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+
+
+DROP TABLE myvoyage_fluorx.sc_2_detail;
+
+CREATE EXTERNAL TABLE myvoyage_fluorx.sc_2_detail (
+    company STRING,
+    voya_plan_id STRING,
+    bst_person_id STRING,
+    party_id STRING,
+    memb_ssn STRING,
+    memb_dob STRING,
+    therapeutic_gpi_name STRING,
+    therapeutic_class_name STRING,
+    current_ndc STRING,
+    current_ndc_name STRING,
+    alternative_ndc_name STRING,
+    allowed DOUBLE,
+    claims INT,
+    allowed_lm DOUBLE,
+    sc_month DATE
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.colossus/bstmyvoyage_fluorx/smartcards/sc_2/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+
+
+######################################################################
+######################################################################
+######################################################################
+# CREATE VOYA CLAIMS TABLES
+
+DROP TABLE smartcards.voya_claims_detail;
+
+CREATE EXTERNAL TABLE smartcards.voya_claims_detail (
+    company STRING,
+    division STRING,  
+    employee_id STRING,
+    member_id STRING,
+    smart_card_id STRING,
+    claimid STRING
+)
+PARTITIONED BY (sc_month STRING)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.etl.data/smartcards/Voya/output/claims/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+
+MSCK REPAIR TABLE smartcards.voya_claims_detail;
+
+
+######################################################################
+######################################################################
+######################################################################
+# CREATE VOYA PEOPLE TABLES
+
+DROP TABLE smartcards.voya_people_impacted;
+DROP TABLE smartcards.voya_people_impacted_ssn;
+######################################################################
+
+DROP TABLE myvoyage_rollins.people_impacted;
+
+CREATE EXTERNAL TABLE myvoyage_rollins.people_impacted (
+    company STRING,
+    voya_plan_id STRING,
+    bst_person_id STRING,
+    party_id STRING,
+    memb_ssn STRING,
+    memb_dob STRING,
+    sc1 BOOLEAN,
+    sc2 BOOLEAN,
+    sc6 BOOLEAN,
+    sc7 BOOLEAN,
+    sc8 BOOLEAN,
+    sc_month DATE
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.colossus/bstmyvoyage_rollins/smartcards/people_impacted/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+
+
+DROP TABLE myvoyage_serco.people_impacted;
+
+CREATE EXTERNAL TABLE myvoyage_serco.people_impacted (
+    company STRING,
+    voya_plan_id STRING,
+    bst_person_id STRING,
+    party_id STRING,
+    memb_ssn STRING,
+    memb_dob STRING,
+    sc1 BOOLEAN,
+    sc2 BOOLEAN,
+    sc6 BOOLEAN,
+    sc7 BOOLEAN,
+    sc8 BOOLEAN,
+    sc_month DATE
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.colossus/bstmyvoyage_serco/smartcards/people_impacted/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+
+
+DROP TABLE myvoyage_voya.people_impacted;
+
+CREATE EXTERNAL TABLE myvoyage_voya.people_impacted (
+    company STRING,
+    voya_plan_id STRING,
+    bst_person_id STRING,
+    party_id STRING,
+    memb_ssn STRING,
+    memb_dob STRING,
+    sc1 BOOLEAN,
+    sc2 BOOLEAN,
+    sc6 BOOLEAN,
+    sc7 BOOLEAN,
+    sc8 BOOLEAN,
+    sc_month DATE
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.colossus/bstmyvoyage_voya/smartcards/people_impacted/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+
+
+DROP TABLE myvoyage_fluorx.people_impacted;
+
+CREATE EXTERNAL TABLE myvoyage_fluorx.people_impacted (
+    company STRING,
+    voya_plan_id STRING,
+    bst_person_id STRING,
+    party_id STRING,
+    memb_ssn STRING,
+    memb_dob STRING,
+    sc1 BOOLEAN,
+    sc2 BOOLEAN,
+    sc6 BOOLEAN,
+    sc7 BOOLEAN,
+    sc8 BOOLEAN,
+    sc_month DATE
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.colossus/bstmyvoyage_fluorx/smartcards/people_impacted/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+######################################################################
+######################################################################
+######################################################################
+
+# PEOPLE IMPACTED SANDBOX
+DROP TABLE myvoyage_sandbox.people_impacted;
+
+CREATE EXTERNAL TABLE myvoyage_sandbox.people_impacted (
+    company STRING,
+    voya_plan_id STRING,
+    bst_person_id STRING,
+    party_id STRING,
+    memb_ssn STRING,
+    memb_dob STRING,
+    sc1 BOOLEAN,
+    sc2 BOOLEAN,
+    sc6 BOOLEAN,
+    sc7 BOOLEAN,
+    sc8 BOOLEAN,
+    sc_month DATE
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.colossus/bstmyvoyage_sandbox/smartcards/people_impacted/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+
+# SC2 SANDBOX
+DROP TABLE myvoyage_sandbox.sc_2_detail;
+
+CREATE EXTERNAL TABLE myvoyage_sandbox.sc_2_detail (
+    company STRING,
+    voya_plan_id STRING,
+    bst_person_id STRING,
+    party_id STRING,
+    memb_ssn STRING,
+    memb_dob STRING,
+    therapeutic_gpi_name STRING,
+    therapeutic_class_name STRING,
+    current_ndc STRING,
+    current_ndc_name STRING,
+    alternative_ndc_name STRING,
+    allowed DOUBLE,
+    claims INT,
+    allowed_lm DOUBLE,
+    sc_month DATE
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.colossus/bstmyvoyage_sandbox/smartcards/sc_2/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+
+
+# PHI MEMBER SANDBOX
+
+DROP TABLE myvoyage_test.people_impacted;
+CREATE EXTERNAL TABLE myvoyage_sandbox.people_impacted (
+    member_uuid STRING,
+    person_id STRING,
+    member_id STRING,
+    employee_id STRING,
+    company_code STRING,
+    tpa STRING,
+    employer STRING,
+    member_first_name STRING,
+    member_last_name STRING,
+    member_address_street STRING,
+    member_address_city STRING,
+    member_address_state STRING,
+    member_address_zip STRING,
+    member_gender STRING,
+    member_dob STRING,
+    member_ssn STRING,
+    relationship STRING,
+    file_name STRING,
+    status STRING,
+    current_record_ind STRING,
+    inputtypeid STRING,
+    updated_dttm STRING,
+    person_id_old STRING,
+    alma_version STRING,
+    tenantid STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.colossus/bstmyvoyage_test/smartcards/phi/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+######################################################################
+# CREATE VOYA SMARTCARDS TABLES
+
+DROP TABLE smartcards.voya_smartcards;
+
+CREATE EXTERNAL TABLE smartcards.voya_smartcards (
+    level INT,
+    company STRING,
+    division STRING, 
+    smart_card_id STRING,
+    smart_card_name STRING,
+    key_metric STRING,
+    key_metric_value DOUBLE,
+    adj_benchm DOUBLE,
+    est_savings DOUBLE,
+    est_savings_pmpm DOUBLE,
+    member_months INT
+)
+PARTITIONED BY (sc_month STRING)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.etl.data/smartcards/Voya/output/smartcards/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+
+MSCK REPAIR TABLE smartcards.voya_smartcards;
+
+
+
+
+
+#########################################################################################
+# CREATE VBA ELIG DATA FOR SMARTCARDS
+
+DROP TABLE IF EXISTS smartcards.vba_sc_elig;
+
+CREATE EXTERNAL TABLE smartcards.vba_sc_elig (
+    Member_Key STRING,
+    Account_Number STRING,
+    Group_Name STRING,
+    Section_Number INT,
+    Contract_Type STRING,
+    Product_Line STRING,
+    Product_Type STRING,
+    Subscriber_ID STRING,
+    Age INT,
+    Member_Gender STRING,
+    Member_Relationship_Code STRING,
+    Member_Status STRING,
+    Member_Medicare_Status_Code STRING,
+    Member_Original_Effective_Date DATE,
+    Subscriber_Zip INT,
+    Member_Effective_Date DATE,
+    Member_Cancel_Date DATE,
+    Risk_Score_Client STRING,
+    Smart_Card_Client STRING,
+    Group_Region STRING
+)
+PARTITIONED BY (year int, month int)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY '|'
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.tpafiles/input/vba_dataservices/vba_analytics/eligibility/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+MSCK REPAIR TABLE smartcards.vba_sc_elig;
+
+
+
+
+###
+
+
+DROP TABLE smartcards.test_vba_sc_elig;
+
+CREATE EXTERNAL TABLE smartcards.test_vba_sc_elig (
+    Member_Key STRING,
+    Account_Number STRING,
+    Group_Name STRING,
+    Section_Number INT,
+    Contract_Type STRING,
+    Product_Line STRING,
+    Product_Type STRING,
+    Subscriber_ID STRING,
+    Age INT,
+    Member_Gender STRING,
+    Member_Relationship_Code STRING,
+    Member_Status STRING,
+    Member_Medicare_Status_Code STRING,
+    Member_Original_Effective_Date DATE,
+    Subscriber_Zip INT,
+    Member_Effective_Date DATE,
+    Member_Cancel_Date DATE,
+    Risk_Score_Client STRING,
+    Smart_Card_Client STRING,
+    Group_Region STRING
+)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY '|'
+STORED AS TEXTFILE
+LOCATION 's3://com.bstis.tpafiles/DM_transfer_files/Juan/SmartCards/vba_elig/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+
+MSCK REPAIR TABLE smartcards.test_vba_sc_elig;
+
+
+
+
+#########################################################################################
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+
+S3_DATA_SOURCE_PATH = ''
+S3_DATA_OUTPUT_PATH = ''
+
+def main():
+spart = SparkSession.builder.appName('jjDemoApp').getOrCreate()
+all_data = spark.read.csv(S3_DATA_SOURCE_PATH, header = True)
+print('Total number of records in the source: %s' % all.data.count())
+selected_data = all_data.where((col('Country')== 'United States'))
+print('Number of US workers %s' % selected_data.count())
+selected_data.write.mode('overwrite).parket(S3_DATA_OUTPUT_PATH)
+print('Selected data was saved to S3: %s' % S3_DATA_OUTPUT_PATH)
+
+if __name__ == '__main__':
+main()
+
+#########################################################################################
+
+
+
+
+# Create a new keystore file
+keytool -genkey -alias jchamie -keyalg RSA -keysize 2048 -keystore KeyStore.jks -storepass bst123456
+
+# Add a certificate to the keystore
+keytool -import -alias jchamie -file my_certificate.pem -keystore KeyStore.jks -storepass bst123456
+
+# Add a truststore to the keystore
+keytool -import -alias jchamie -file my_truststore.pem -keystore KeyStore.jks -storepass bst123456
+
+
+C:\Users\juan.quintero>keytool -genkey -alias jchamie -keyalg RSA -keysize 2048 -keystore KeyStore.jks -storepass bst123456
+What is your first and last name?
+  [Unknown]:  Juan Chamie
+What is the name of your organizational unit?
+  [Unknown]:  BST
+What is the name of your organization?
+  [Unknown]:  BST
+What is the name of your City or Locality?
+  [Unknown]:  Boston
+What is the name of your State or Province?
+  [Unknown]:  MA
+What is the two-letter country code for this unit?
+  [Unknown]:  US
+Is CN=Juan Chamie, OU=BST, O=BST, L=Boston, ST=MA, C=US correct?
+  [no]:  yes
+
+Enter key password for <jchamie>
+        (RETURN if same as keystore password):
+Re-enter new password: bst123456
+
+Warning:
+The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format using "keytool -importkeystore -srckeystore my_keystore.jks -destkeystore my_keystore.jks -deststoretype pkcs12".
+
+C:\Users\juan.quintero>
+;
+
+DATABASES=$(hive -e 'SHOW DATABASES;')
+TARGET_DATE='2024-01-01'
+# Iterate over each database and run the query
+for DB in $DATABASES; do
+ echo "Processing database: $DB"
+ QUERY="USE $DB; SELECT COUNT(*) FROM elig WHERE month = DATE '$TARGET_DATE';"
+ echo "Running query: $QUERY"
+ RESULT=$(hive -e "$QUERY")
+ echo "Result for $DB: $RESULT"
+done
+
+#!/bin/bash
+DATABASES = ('basfco','oshkosh')
+TARGET_DATE ='2024-01-01'
+for DB in $DATABASES; do
+ echo "Processing database: $DB"
+ QUERY="USE $DB; SELECT COUNT(*) FROM elig WHERE month = DATE '$TARGET_DATE';"
+ echo "Running query: $QUERY"
+ RESULT=$(hive -e "$QUERY")
+ echo "Result for $DB: $RESULT"
+done

@@ -1,0 +1,33 @@
+The Disproportionate Share Hospital (DSH) Diagnosis-Related Group (DRG) classification system categorizes patients into groups based on clinical conditions, types of treatment and procedures, and levels of resources utilized. Dividing the entire DRG system into 5 or 6 groups by their affordability posing quite a complex problem since the DRG system has over 700 categories and it depends on many factors.
+
+However, one possible approach is to group DRGs by Major Diagnostic Categories (MDCs) combined with cost levels. A typical DRG is based on three factors: primary diagnosis, treatment procedures, and the patient's discharge status. 
+
+Here is an example of how you may decide to categorize them:
+
+Group 1: High-Cost and High-Complexity DRG ($$$)
+- DRG related to Major Organ Transplantation or Heart/Lung Transplantation
+- DRG related to Bone Marrow Transplants
+
+Group 2: Medium-Cost and High-Complexity DRG ($$)
+- DRG related to Severe Infectious Diseases
+- DRG related to Severe Cardiovascular Conditions
+- DRG related to Severe Chronic Conditions
+
+Group 3: Medium-Cost and Medium-Complexity DRG ($$)
+- DRG related to Abuse or Dependence on Drugs/Substance
+- DRG related to Moderate Cardiovascular Conditions
+- DRG related to Moderate Infectious Diseases
+
+Group 4: Low-Cost and Low-Complexity DRG ($)
+- DRG related to Minor Cardiovascular Conditions
+- DRG related to Minor Infectious Diseases
+- DRG related to Minor Surgical Procedures
+
+Group 5: Preventative and Observation DRG ($)
+- DRG related to Screenings and Evaluations
+- DRG related to Observations 
+- DRG related to Counseling/Prevention
+
+This is just an idea, the specific division will depend on the Hospital budget and resources and how they provider they services. A healthcare management consultant or specialist should take on this task to adjust the groups for the specific hospital/healthcare provider's needs and capabilities. 
+
+For a full list of DRG codes, you can find them in the CMS (Centers for Medicare and Medicaid Services) website as they provide a full list in a downloadable format. It's impossible to provide a full list in a response here due to the extensive number of the codes. Furthermore, codes might be different from country to country with International Classification of Diseases, 10th Revision (ICD-10). Ensure to get professional advice locally.
